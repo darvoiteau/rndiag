@@ -1,0 +1,11 @@
+[package]
+name = "rndiag-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rndiag-core = { path = "../rndiag-core" }
+rndiag-metrics = { path = "../rndiag-metrics" }
+anyhow = "1"
+warp = "0.3.7"
+tokio = { version = "1.44.2", features = ["full"] }

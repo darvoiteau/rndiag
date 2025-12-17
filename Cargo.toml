@@ -1,0 +1,9 @@
+[workspace]
+resolver = "3"
+members = [
+    "rndiag-core",
+    "rndiag-cli",
+    "rndiag-graph",
+    "rndiag-metrics",
+    "rndiag-server",
+]
