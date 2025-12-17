@@ -3,6 +3,11 @@
 A program developed in rust to check and diagnostic network latencies and connecivites issues.
 Rndiag is designed to be a toolkit for diagnosing and testing these network issues.
 Rndiag is also designed to follow network latency drift over time
+<br>
+<p align="center">
+  <img src="img/graph1.png" alt="graph1" />
+</p>
+<br>
 
 ## Features
 - Ping tool
