@@ -26,7 +26,7 @@ struct Args{
     ///stop after <count> replies
     count: u16,
 
-    #[argh(option, short = 'o', default = r#"String::from("output.csv")"#)]
+    #[argh(option, short = 'o', default = r#"String::from("AjaNuP123YuL903nNNaZY")"#)]
     ///output csv filename
     output: String,
 
@@ -55,8 +55,8 @@ struct Args{
     flag: String,
 
     #[argh(option, short = 'D', default = r#"String::from("none")"#)]
-    ///quick network diagnostics (ping latency, resolution latency, tcp_ping). to use diagnostic -D => True
-    ///Usage: rndiag D <speedtestSrv> -d => specify specific server to resolve and to contact for ping and tcp_ ping, -p => specify specific port to contact for tcp_ping
+    ///quick network diagnostics (ping latency, resolution latency, tcp_ping). to use diagnostic -D => True 
+    ///Usage: rndiag -D <speedtestSrv> -d => specify specific server to resolve and to contact for ping and tcp_ ping, -p => specify specific port to contact for tcp_ping
     diagnostic: String,
 
     #[argh(option, short='P', default = "false")]
@@ -140,9 +140,13 @@ async fn main() -> anyhow::Result<()> {
             eprintln!("Error during rndiag launching: {}", e);
         });
 
-        //Call export_csv method inerhited of the trait of the object to save results in csv file
-        if let Err(e) = ping_tool.export_csv() {
-            eprintln!("Export CSV error: {}", e);
+        //If the user was defined something for output it means he want to have an output
+        if &options.output != "AjaNuP123YuL903nNNaZY"
+        {
+            //Call export_csv method inerhited of the trait of the object to save results in csv file
+            if let Err(e) = ping_tool.export_csv() {
+                eprintln!("Export CSV error: {}", e);
+            }
         }
 
     }
@@ -155,9 +159,12 @@ async fn main() -> anyhow::Result<()> {
             eprintln!("Error during rndiag launching: {}", e);
         });
 
-        // Exemple : exporter les données
-        if let Err(e) = nslookup_tool.export_csv() {
-            eprintln!("Erreur d'export CSV : {}", e);
+        
+        if &options.output != "AjaNuP123YuL903nNNaZY"
+        {
+            if let Err(e) = nslookup_tool.export_csv() {
+                eprintln!("Erreur d'export CSV : {}", e);
+            }
         }
 
     }
@@ -172,11 +179,12 @@ async fn main() -> anyhow::Result<()> {
             eprintln!("Error during rndiag launching: {}", e);
         });
 
-         // Exemple : exporter les données
-        if let Err(e) = tcpping.export_csv() {
-            eprintln!("Erreur d'export CSV : {}", e);
+        if &options.output != "AjaNuP123YuL903nNNaZY"
+        {
+            if let Err(e) = tcpping.export_csv() {
+                eprintln!("Erreur d'export CSV : {}", e);
+            }
         }
-
 
     }
     else if selected_tool == "sptest" {

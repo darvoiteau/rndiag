@@ -48,7 +48,7 @@ Options:
   -f, --flag        tcp flag for tcp_ping. S => SYN, A => ACK, R => RST, F =>
                     FIN, P => PUSH, U => URG
   -D, --diagnostic  quick network diagnostics (ping latency, resolution latency,
-                    tcp_ping). to use diagnostic -D => TrueUsage: rndiag D
+                    tcp_ping). to use diagnostic -D => True Usage: rndiag -D
                     <speedtestSrv> -d => specify specific server to resolve and
                     to contact for ping and tcp_ ping, -p => specify specific
                     port to contact for tcp_ping

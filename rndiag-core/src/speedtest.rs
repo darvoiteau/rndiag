@@ -107,7 +107,6 @@ impl ConnectTool for SpeedTest{
     #[allow(unused_assignments)]
     //Handle the client side
     async fn client(&mut self) -> std::io::Result<()> {
-
         //Need init the IpAddr object before use it, so init with 0.0.0.0 and will be modified later
         let mut target_ip: IpAddr = IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0));
 
@@ -134,7 +133,7 @@ impl ConnectTool for SpeedTest{
             let start = Instant::now();
             let mut total_sent = 0usize;
 
-            let limit_bytes_per_sec = (self.mbps as usize * 1000000) / 8;
+            let limit_bytes_per_sec = (self.mbps * 1024 * 1024 / 8) as usize;
             let duration_secs = self.tst_duration;
 
             while start.elapsed() < Duration::from_secs(duration_secs) {
@@ -145,10 +144,21 @@ impl ConnectTool for SpeedTest{
                     tokio::time::sleep(Duration::from_millis(10)).await;
                     continue;
                 }
+                
 
-                let chunk_size = std::cmp::min(buffer.len(), limit_bytes_per_sec);
-                socket.write_all(&buffer[..chunk_size]).await?;
-                total_sent += chunk_size;
+                loop {
+                    if start.elapsed() >= Duration::from_secs(duration_secs) { 
+                    break; 
+                    }
+                    match socket.try_write(&buffer) {
+                        Ok(n) => total_sent += n,
+                        Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
+                            tokio::task::yield_now().await;
+                        }
+                        Err(e) => return Err(e),
+                    }
+                }
+                
             }
 
             //End upload sign
@@ -218,48 +228,47 @@ impl SpeedTest{
 
 //Handle upload method for server part
 async fn handle_upload(socket: &mut tokio::net::TcpStream, limit_bytes_per_sec: usize, duration_secs: u64) -> std::io::Result<()> {
-    println!("Starting UPLOAD test...");
     let mut buffer = vec![0u8; 64 * 1024];
     let start = Instant::now();
     let mut total_uploaded = 0usize;
+    let duration_socket = Duration::from_secs(1);
 
     loop {
-        // Global Timeout
-        if start.elapsed() >= Duration::from_secs(duration_secs + 2) {
-            println!("Upload timeout reached");
+        if start.elapsed() >= Duration::from_secs(duration_secs + 1) {
+            
             break;
         }
 
-        tokio::select! {
-            result = socket.read(&mut buffer) => {
-                let n = result?;
-                if n == 0 { 
-                    println!("Client closed connection");
-                    break; 
-                }
-                
-                total_uploaded += n;
-
-                //Check if we received the "UPLOAD_DONE" sign from the client
-                if buffer[..n].windows(12).any(|w| w == b"UPLOAD_DONE\n") {
-                    println!("Received UPLOAD_DONE signal");
-                    break;
-                }
-
-                // Throttling
+        let n = match tokio::time::timeout(duration_socket, socket.read(&mut buffer)).await {
+            Ok(Ok(n)) => n,         // Read OK
+            Ok(Err(e)) => return Err(e), // True error of read
+            Err(_) => {
+                // timeout excedeed
                 let elapsed = start.elapsed().as_secs_f64();
-                let expected_bytes = (limit_bytes_per_sec as f64) * elapsed;
-                if total_uploaded as f64 > expected_bytes {
-                    sleep(Duration::from_millis(10)).await;
-                }
+                let mbps = total_uploaded as f64 * 8.0 / 1_000_000.0 / elapsed;
+                println!("Upload completed: {:.2} Mbps", mbps);
+                return Ok(()) //Return ok because its mean the client is finished
             }
+        };
+
+        if n == 0 {
+            break; // EOF
+        }
+
+        total_uploaded += n;
+
+
+        let elapsed = start.elapsed().as_secs_f64();
+        let expected = limit_bytes_per_sec as f64 * elapsed;
+        if total_uploaded as f64 > expected {
+            tokio::time::sleep(Duration::from_millis(5)).await;
         }
     }
-    //Time calculation + moy bandwidth calculation during the speedtest
+
     let elapsed = start.elapsed().as_secs_f64();
     let mbps = total_uploaded as f64 * 8.0 / 1_000_000.0 / elapsed;
     println!("Upload completed: {:.2} Mbps", mbps);
-
+    
     Ok(())
 }
 
