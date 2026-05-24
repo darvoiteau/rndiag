@@ -11,5 +11,5 @@ rndiag-metrics = { path = "../rndiag-metrics"}
 rndiag-server = { path = "../rndiag-server" }
 tokio = { version = "1.48.0", features = ["full"] }
 argh = "0.1.13"
-pnet = "0.34.0"
+pnet = { version = "0.34.0", default-features = false, features = ["std", "pnet_transport"] }
 regex = "1.12.2"

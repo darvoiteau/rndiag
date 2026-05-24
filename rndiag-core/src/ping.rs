@@ -188,7 +188,12 @@ impl LatencyTool for PingTool {
                 .send()
             {
                 Ok(_) => {},
-                Err(e) => eprintln!("Ping failed with RAW socket: {}", e),
+                Err(e) => {
+                    eprintln!("Ping failed with RAW socket: {}", e); 
+                    if e.to_string().contains("Network is unreachable"){
+                        std::process::exit(1);
+                    }
+                },
             };
             res
             }).await;

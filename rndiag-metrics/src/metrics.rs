@@ -44,7 +44,8 @@ pub trait MetricsLatency {
 
         let mut metrics_latency: String = String::from(self.name());
 
-        metrics_latency = metrics_latency + "{target=\"{}\"} " + self.latency_moy_sampled().to_string().as_str() + "\n";
+        //metrics_latency = metrics_latency + "{target=\"{}\"} " + self.latency_moy_sampled().to_string().as_str() + "\n";
+        metrics_latency = metrics_latency + "{target=\"" + self.dst().as_str() + "\"} " + self.latency_moy_sampled().to_string().as_str() + "\n";
 
         //------------------Latencies status metrics format------------------
 
@@ -55,8 +56,8 @@ pub trait MetricsLatency {
         type_latency_state = type_latency_state + self.name() + " gauge\n";
         
         let mut metrics_latency_state: String = String::from(self.name());
-        metrics_latency_state = metrics_latency_state + "_state" + "{target=\"{}\"} " + self.latency_level().to_string().as_str() + "\n";
-
+        //metrics_latency_state = metrics_latency_state + "_state" + "{target=\"{}\"} " + self.latency_level().to_string().as_str() + "\n";
+        metrics_latency_state = metrics_latency_state + "_state" + "{target=\"" + self.dst().as_str() + "\"} " + self.latency_level().to_string().as_str() + "\n";
 
         //Push formated prom text data in output_exporter to be ready to write in metric file by web_server.rs
         self.output_exporter().push(help_latency);

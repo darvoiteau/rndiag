@@ -5,10 +5,11 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1"
-ping = "0.6.1"
+ping = { version = "0.6.1", default-features = false }
 csv = "1.4.0"
 rndiag-graph = { path = "../rndiag-graph" }
 tokio = { version = "1.48.0", features = ["full"] }
 crossterm = "0.29.0"
 dns-lookup = "3.0.1"
-pnet = "0.34.0"
+pnet = { version = "0.34.0", default-features = false, features = ["std", "pnet_transport"] }
+socket2 = "0.6.3"

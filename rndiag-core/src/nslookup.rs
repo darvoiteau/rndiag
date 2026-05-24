@@ -212,6 +212,9 @@ impl LatencyTool for NSlookup {
                         use crossterm::terminal::disable_raw_mode;
                         disable_raw_mode()?;
                         eprintln!("DNS lookup error: {}", e);
+                        if e.to_string().contains("Name or service not known"){
+                            std::process::exit(1);
+                        }
                         enable_raw_mode()?;
                         continue; // Skip this iteration
                     }

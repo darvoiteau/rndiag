@@ -32,14 +32,14 @@ use csv::Writer;
             //Get the vecsize to know the number of ping and number of related lantencies values
             let vec_size = self.sys_time().len();
 
-
                 //Calculate the min and max latency on all executed ping
                 let max_latency = *self.data().iter().max().unwrap();
                 let min_latency = *self.data().iter().min().unwrap();
 
                 //Get the sum to calcul the moy latency on all executed ping
-                let sum_latency: u16 = self.data().iter().sum();
-                let moy_latency = sum_latency as u16 / vec_size as u16;
+                let sum_latency: u64 = self.data().iter().map(|x| *x as u64).sum();
+                let moy_latency = sum_latency as u64 / vec_size as u64;
+
 
                 //Calculate the number of no received packets
                 //5000ms for a packet is considered as timeout and a no received packet
@@ -375,11 +375,11 @@ use csv::Writer;
                            }
 
                         }
-                     
+
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 60 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -391,8 +391,8 @@ use csv::Writer;
                else {
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -445,8 +445,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 120 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -458,8 +458,8 @@ use csv::Writer;
 
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -510,8 +510,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 240 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -523,8 +523,8 @@ use csv::Writer;
                else {
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -575,8 +575,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 480 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -589,8 +589,8 @@ use csv::Writer;
 
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -641,8 +641,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 960 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -654,8 +654,8 @@ use csv::Writer;
                else {
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -706,8 +706,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 1920 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -718,8 +718,8 @@ use csv::Writer;
 
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -768,8 +768,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 3840 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -781,8 +781,8 @@ use csv::Writer;
                else {
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -832,8 +832,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 7680 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -845,8 +845,8 @@ use csv::Writer;
                else {
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -897,8 +897,8 @@ use csv::Writer;
                      
                      let max_latency_sample = elem_temp.iter().max().unwrap();
                      let min_latency_sample = elem_temp.iter().min().unwrap();
-                     let sum_latency_sample: u16 = elem_temp.iter().sum();
-                     let moy_latency_sample = sum_latency_sample as u16 / 15360 as u16;
+                     let sum_latency_sample: u64 = elem_temp.iter().map(|x| *x as u64).sum();
+                     let moy_latency_sample = sum_latency_sample as u64 / 60 as u64;
 
                      self.latency_max_sampled().push(*max_latency_sample as u64);
                      self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -910,8 +910,8 @@ use csv::Writer;
                else {
                 let max_latency_sample = *self.latency_max()[j..i].iter().max().unwrap();
                 let min_latency_sample = *self.latency_min()[j..i].iter().min().unwrap();
-                let sum_latency_sample: u16 = self.latency_moy()[j..i].iter().sum();
-                let moy_latency_sample = sum_latency_sample as u16 / interval as u16;
+                let sum_latency_sample: u64 = self.latency_moy()[j..i].iter().map(|x| *x as u64).sum();
+                let moy_latency_sample = sum_latency_sample as u64 / interval as u64;
 
                 self.latency_max_sampled().push(max_latency_sample as u64);
                 self.latency_moy_sampled().push(moy_latency_sample as u64);
@@ -976,7 +976,10 @@ use csv::Writer;
     //resolve method
     //Resolve hostname to get IP when the user give hostname instead of IP
     fn resolve(&mut self) -> IpAddr{
-      let result_ip = lookup_host(&self.target()).unwrap().collect::<Vec<_>>();
+      let result_ip = lookup_host(&self.target()).unwrap_or_else(|e|{
+         eprintln!("Error during the name lookup: {}", e);
+         std::process::exit(1);
+      }).collect::<Vec<_>>();
       result_ip[0]
     }
 
@@ -994,7 +997,10 @@ pub trait ConnectTool{
    //resolve method
    //Resolve hostname to get IP when the user give hostname instead of IP
    fn resolve(&mut self) -> IpAddr{
-      let result_ip = lookup_host(&self.srv_addr()).unwrap().collect::<Vec<_>>();
+      let result_ip = lookup_host(&self.srv_addr()).unwrap_or_else(|e|{
+         eprintln!("Error during the name lookup: {}", e);
+         std::process::exit(1);
+      }).collect::<Vec<_>>();
       result_ip[0]
     }
 }
