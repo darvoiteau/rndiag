@@ -3,22 +3,22 @@
 ## Version 1.1.2
 - Fix issue #1 "Terminal crash". Linux terminal crashed when you launched rndiag with the tcp ping in IPv6 without sudo
 
-- Rndiag crashed when you tried to show the graph before to have 5 ping
-  - Now, rndiag do not crash and the graph display a message to inform the lack of ping to display data
+- Rndiag crashed when you tried to show the graph before having 5 ping
+  - Now, rndiag do not crash and the graph displays a message to inform of the lack of pings to display data
 
-- Fix displayed average data in graph when you launch rndiag for couple of hours/days
-  - This bug was introduced in the previous release and the calcul of the average before to display it in graph was wrong
+- Fix displayed average data in graph when you launch rndiag for a couple of hours/days
+  - This bug was introduced in the previous release and the calculation of the average before displaying it in the graph was wrong
 
-- Rndiag crashed over 9h of ping. This release fix this issue
+- Rndiag crashed after 9h of ping. This release fixes this issue
 
-- Improvement of errors handling and management
-  - Since release 1.1.1 a work is in progress to handle and manage correctly errors
-  - Some errors was not handled correctly
-  - Some errors broken the Linux terminal or broken the Linux terminal displaying
-  - Some important errors was handled but didn't stopped rndiag
+- Improvement of error handling and management
+  - Since release 1.1.1, work has been in progress to handle and manage errors correctly
+  - Some errors were not handled correctly
+  - Some errors broke the Linux terminal or broke the Linux terminal display
+  - Some important errors were handled but didn't stop rndiag
   - ...
 
-- Add 
+- Add a Rndiag executable binary for armv7
 
 ## Version 1.1.1
 - Fix exporter exposed metrics format => some syntax issues fixed, the destination is now correctly displayed in target="XXX"
