@@ -14,7 +14,7 @@ use rndiag_metrics::ping_metrics;
 use rndiag_metrics::resolver_metrics;
 use rndiag_metrics::tping_metrics;
 
-pub async fn launch_srv(parsing_time: u64, addr: &str, addr_srv: &str, port: u16, port_srv: u16, filename: &str, output: &str, nb_ping: u16, flag: u8) {
+pub async fn launch_srv(parsing_time: u64, addr: &str, addr_srv: &str, port: u16, port_srv: u16, filename: &str, output: &str, nb_ping: u32, flag: u8) {
     let addr_string = addr.to_string();
     let output_clone = output.to_string();
     let addr_srv_string = addr_srv.to_string();

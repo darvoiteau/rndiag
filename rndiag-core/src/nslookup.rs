@@ -15,19 +15,19 @@ use dns_lookup::{lookup_host, lookup_addr};
 //Ping object definition
 pub struct NSlookup {
     pub target: String, //IP or host to ping
-    data: Vec<u16>, //Latency of each pin
+    data: Vec<u32>, //Latency of each pin
     begin_time: u64, //Time when pings start => Used to determine the elapsed time to detect scale for sampling
     elapsed_time: u64, //Elasped time since the first ping => Used with the begin_time to determine the scale for sampling
     sys_time: Vec<u64>, //Get the current system timestamp of each ping => used to get the number of data ping's and used to calculate elapsed_time
     latency_time: Vec<u64>, //Store the system timestamp of each sampled graph data point ping
-    latency_min: Vec<u16>, //Store each latency ping => used for min latency sampling calculation
-    latency_moy: Vec<u16>, //Store each latency ping => used for moy latency sampling calculation
-    latency_max: Vec<u16>, //Store each latency ping => used for max latency sampling calculation
+    latency_min: Vec<u32>, //Store each latency ping => used for min latency sampling calculation
+    latency_moy: Vec<u32>, //Store each latency ping => used for moy latency sampling calculation
+    latency_max: Vec<u32>, //Store each latency ping => used for max latency sampling calculation
     latency_min_sampled: Vec<u64>, //Store sampled min latency values
     latency_moy_sampled: Vec<u64>, //Store sampled moy latency values
     latency_max_sampled: Vec<u64>, //Store sampled max latency values
     output: String, //Destination csv file
-    nb_ping: u16, //The number of ping defined by the user or if default => infinity ping
+    nb_ping: u32, //The number of ping defined by the user or if default => infinity ping
 }
 
 impl LatencyTool for NSlookup {
@@ -37,12 +37,12 @@ impl LatencyTool for NSlookup {
     }
 
     //Return the data vec => used in the definition of NetworkTool Methods trait when it wants to read object attribute
-    fn data(&self) -> &Vec<u16> {
+    fn data(&self) -> &Vec<u32> {
         &self.data
     }
 
     //Return the data vec => used in the definition of NetworkTool Methods trait when it wants to read object attribute
-    fn nb_ping(&self) -> &u16{
+    fn nb_ping(&self) -> &u32{
         &self.nb_ping
     }
 
@@ -67,17 +67,17 @@ impl LatencyTool for NSlookup {
     }
 
     //Return the latency_min vec => used in the definition of NetworkTool Methods trait when it wants to read and modify object attribute
-    fn latency_min(&mut self) -> &mut Vec<u16> {
+    fn latency_min(&mut self) -> &mut Vec<u32> {
         &mut self.latency_min
     }
 
     //Return the latency_moy vec => used in the definition of NetworkTool Methods trait when it wants to read and modify object attribute
-    fn latency_moy(&mut self) -> &mut Vec<u16> {
+    fn latency_moy(&mut self) -> &mut Vec<u32> {
         &mut self.latency_moy
     }
 
     //Return the latency_max vec => used in the definition of NetworkTool Methods trait when it wants to read and modify object attribute
-    fn latency_max(&mut self) -> &mut Vec<u16> {
+    fn latency_max(&mut self) -> &mut Vec<u32> {
         &mut self.latency_max
     }
 
@@ -129,10 +129,10 @@ impl LatencyTool for NSlookup {
             hostname = true;
         }
         
-        let nb_ping: u16 = self.nb_ping;
+        let nb_ping: u32 = self.nb_ping;
 
         //used to do ping while i is < nb_ping
-        let mut i: u16 = 0;
+        let mut i: u32 = 0;
         
         //used to do ping while is not equal to scale. 1 scale = 1 sampling for graph
         let mut j: u16 = 0;
@@ -258,7 +258,7 @@ impl LatencyTool for NSlookup {
 
             }
             else{
-            self.data.push(time);
+            self.data.push(time as u32);
             self.sys_time.push(self.get_time());
             }
 
@@ -347,14 +347,14 @@ impl LatencyTool for NSlookup {
 impl NSlookup{
     //Function to set PingTool attributes
     #[allow(dead_code)]
-    fn setting (&mut self, output: &str, nb_ping: u16){
+    fn setting (&mut self, output: &str, nb_ping: u32){
         self.output = output.to_string();
         self.nb_ping = nb_ping;
 
     }
 
     //Init attributes of the object
-    pub fn new(target: &str, output: &str, nb_ping: u16) -> Self {
+    pub fn new(target: &str, output: &str, nb_ping: u32) -> Self {
         Self {
             target: target.to_string(),
             output: output.to_string(),

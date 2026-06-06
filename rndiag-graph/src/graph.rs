@@ -91,7 +91,7 @@ pub fn graph_display(latency_min_sampled: &Vec<u64>, latency_moy_sampled: &Vec<u
 
     //Display no data on the graph if we have no data
     if data_ref.is_empty() {
-        let no_data = Paragraph::new("No data to display")
+        let no_data = Paragraph::new("No data to display, need 5 pings to display values in the graph.")
             .block(Block::default().borders(Borders::ALL).title(title))
             .style(Style::default().fg(Color::Gray));
         f.render_widget(no_data, layout[0]);

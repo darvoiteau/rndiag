@@ -1,5 +1,5 @@
 //Count the number of received packet from the lasts pings tests during the diagnostic
-pub fn packet_received(packet: &Vec<u16>) -> u8{
+pub fn packet_received(packet: &Vec<u32>) -> u8{
 
     let zero: u8 = packet.iter().filter(|&&x| x == 5000).count() as u8;
     zero

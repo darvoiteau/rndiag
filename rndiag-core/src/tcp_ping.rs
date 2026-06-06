@@ -23,19 +23,19 @@ use crate::tool::LatencyTool;
 pub struct TCPPingTool {
     pub target: String,
     port: u16,
-    data: Vec<u16>,
+    data: Vec<u32>,
     begin_time: u64,
     elapsed_time: u64,
     sys_time: Vec<u64>,
     latency_time: Vec<u64>,
-    latency_min: Vec<u16>,
-    latency_moy: Vec<u16>,
-    latency_max: Vec<u16>,
+    latency_min: Vec<u32>,
+    latency_moy: Vec<u32>,
+    latency_max: Vec<u32>,
     latency_min_sampled: Vec<u64>,
     latency_moy_sampled: Vec<u64>,
     latency_max_sampled: Vec<u64>,
     output: String,
-    nb_ping: u16,
+    nb_ping: u32,
     flag: u8,
 }
 
@@ -48,11 +48,11 @@ impl LatencyTool for TCPPingTool {
         "tping"
     }
 
-    fn data(&self) -> &Vec<u16> {
+    fn data(&self) -> &Vec<u32> {
         &self.data
     }
 
-    fn nb_ping(&self) -> &u16 {
+    fn nb_ping(&self) -> &u32 {
         &self.nb_ping
     }
 
@@ -72,15 +72,15 @@ impl LatencyTool for TCPPingTool {
         &mut self.latency_time
     }
 
-    fn latency_min(&mut self) -> &mut Vec<u16> {
+    fn latency_min(&mut self) -> &mut Vec<u32> {
         &mut self.latency_min
     }
 
-    fn latency_moy(&mut self) -> &mut Vec<u16> {
+    fn latency_moy(&mut self) -> &mut Vec<u32> {
         &mut self.latency_moy
     }
 
-    fn latency_max(&mut self) -> &mut Vec<u16> {
+    fn latency_max(&mut self) -> &mut Vec<u32> {
         &mut self.latency_max
     }
 
@@ -117,7 +117,7 @@ impl LatencyTool for TCPPingTool {
 impl TCPPingTool {
     #[allow(unused_assignments)]
     async fn tcp_ping(&mut self, flags: u8, interval_ms: u64) -> std::io::Result<()> {
-        let mut i: u16 = 0;
+        let mut i: u32 = 0;
         let mut j: u16 = 0;
 
         // Resolve hostname or parse IP
@@ -229,12 +229,14 @@ impl TCPPingTool {
                     };
 
                     // Raw IPv6 socket: kernel adds the IPv6 header, we only provide TCP segment
+                    disable_raw_mode()?;
                     let send_sock = Socket::new(
                         Domain::IPV6,
                         Type::RAW,
                         Some(Protocol::from(6)), // IPPROTO_TCP = 6
                     )
                     .expect("failed to create IPv6 raw send socket (need root)");
+                    enable_raw_mode()?;
 
                     let mut tcp_buffer = [0u8; 20];
                     build_tcp_packet_v6(&mut tcp_buffer, src, dst, src_port, self.port, flags);
@@ -270,7 +272,7 @@ impl TCPPingTool {
                     if latency.as_millis() as u16 >= 5000 {
                         self.data.push(5000);
                     } else {
-                        self.data.push(latency.as_millis() as u16);
+                        self.data.push(latency.as_millis() as u32);
                     }
                     self.sys_time.push(self.get_time());
 
@@ -333,13 +335,13 @@ impl TCPPingTool {
 
     // Override output filename and ping count after construction.
     #[allow(dead_code)]
-    fn setting(&mut self, output: &str, nb_ping: u16) {
+    fn setting(&mut self, output: &str, nb_ping: u32) {
         self.output = output.to_string();
         self.nb_ping = nb_ping;
     }
 
     // Construct a new TCPPingTool with all vectors initialised to empty.
-    pub fn new(target: &str, output: &str, nb_ping: u16, port: u16, flag: u8) -> Self {
+    pub fn new(target: &str, output: &str, nb_ping: u32, port: u16, flag: u8) -> Self {
         Self {
             target: target.to_string(),
             output: output.to_string(),
